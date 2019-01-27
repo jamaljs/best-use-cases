@@ -1,80 +1,80 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<title>Jamal Login Example</title>
-	<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Jamal Login Example</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-	
-	<div class="login-page">
-		<p class="form" style="margin-bottom: 0">Tip: Send empty password to see incorrent message.</p>
-	</div>
+  
+  <div class="login-page">
+    <p class="form" style="margin-bottom: 0">Tip: Send empty password to see incorrent message.</p>
+  </div>
 
-	<div id="login-page" class="login-page"></div>
+  <div id="login-page" class="login-page"></div>
 
-	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-	<script src="https://unpkg.com/jamal@1.2.0/build/src.min.js"></script>
-	<script>
-	
-		const _ = Jml;
-		_.initialize({
-			originalNames: true,
-			autoId: true
-		});
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="https://unpkg.com/jamal@1.2.0/build/src.min.js"></script>
+  <script>
+  
+    const _ = Jml;
+    _.initialize({
+      originalNames: true,
+      autoId: true
+    });
 
-		const setLoginStatus = (status = false ) => {
-			if (!status) {
-				return div({ id: 'login-status' }, 'Error! Login incorrect.');
-			}
+    const setLoginStatus = (status = false ) => {
+      if (!status) {
+        return div({ id: 'login-status' }, 'Error! Login incorrect.');
+      }
 
-			return div({ id: 'login-status' }, 'Success! Logged in successfuly.');
-		}
+      return div({ id: 'login-status' }, 'Success! Logged in successfuly.');
+    }
 
-		const loginForm = _.create('#login-page', div({ class: 'form' }, form(
-			{
-				class: 'login-form',
-				// Catch on submit event and stop it,
-				// Do an async login with axios to an api,
-				// Show login status indicator.
-				_onSubmit(event) {
-					event.preventDefault();
+    const loginForm = _.create('#login-page', div({ class: 'form' }, form(
+      {
+        class: 'login-form',
+        // Catch on submit event and stop it,
+        // Do an async login with axios to an api,
+        // Show login status indicator.
+        _onSubmit(event) {
+          event.preventDefault();
 
-					// Get form and login status from form
-					const { form, loginStatus } = { form: this, loginStatus: this.querySelector('#login-status') };
-					// Remove login status if exists
-					loginStatus ? loginStatus.remove(): null;
+          // Get form and login status from form
+          const { form, loginStatus } = { form: this, loginStatus: this.querySelector('#login-status') };
+          // Remove login status if exists
+          loginStatus ? loginStatus.remove(): null;
 
-					// Get and serialize form data
-					const formData = new FormData(form);
-					const formDataKeyValue = {};
-					for (const field of formData.entries()) formDataKeyValue[field[0]] = field[1];
+          // Get and serialize form data
+          const formData = new FormData(form);
+          const formDataKeyValue = {};
+          for (const field of formData.entries()) formDataKeyValue[field[0]] = field[1];
 
-					// Log in to an api 
-					const loginProcess = axios.post('https://reqres.in/api/login', formDataKeyValue);
+          // Log in to an api 
+          const loginProcess = axios.post('https://reqres.in/api/login', formDataKeyValue);
 
-					loginProcess
-						// If login corrects then set login status true and show a login success div
-						.then(res => form.appendChild(setLoginStatus(true)))
-						// Else show a login incorrect div
-						.catch(err => form.appendChild(setLoginStatus(false)));
+          loginProcess
+            // If login corrects then set login status true and show a login success div
+            .then(res => form.appendChild(setLoginStatus(true)))
+            // Else show a login incorrect div
+            .catch(err => form.appendChild(setLoginStatus(false)));
 
-					return false;
-				}
-			},
-			[ // Form fields and login status placeholder
-				input({ type: 'text', name: 'email', placeholder: 'Email', value: 'akinozgen17@outlook.com' }),
-				input({ type: 'password', name: 'password', placeholder: 'Password', value: '123456' }),
-				button({ type: 'submit' }, 'login'),
-				div({ id: 'login-status' })
-			]
-		)));
+          return false;
+        }
+      },
+      [ // Form fields and login status placeholder
+        input({ type: 'text', name: 'email', placeholder: 'Email', value: 'akinozgen17@outlook.com' }),
+        input({ type: 'password', name: 'password', placeholder: 'Password', value: '123456' }),
+        button({ type: 'submit' }, 'login'),
+        div({ id: 'login-status' })
+      ]
+    )));
 
-		loginForm.render();
-	
-	</script>
+    loginForm.render();
+  
+  </script>
 
 </body>
 </html>
